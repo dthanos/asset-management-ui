@@ -1,16 +1,9 @@
 <template>
     <v-data-table-server
+        v-on="datatableStore.on"
         v-bind="options"
         :loading="loading"
-        :headers="[
-            {title: 'Title', value: 'title', sortable: true},
-            {title: 'Type', value: 'type.name', sortable: true},
-            {title: 'Size', value: 'size', sortable: true},
-            {title: 'Address', value: 'address', sortable: true},
-            {title: 'Description', value: 'description', sortable: true},
-            {title: 'Created', value: 'created_at', sortable: true},
-            {title: 'Updated', value: 'updated_at', sortable: true},
-        ]"
+        :headers="headers"
         :items="items"
     >
         <template v-slot:item="{ item, index }">
@@ -24,6 +17,9 @@
                 <td>{{ datetimeDatabaseToHuman(item.updated_at) }}</td>
             </tr>
         </template>
+        <template v-slot:loading>
+            <v-skeleton-loader type="table-tbody" />
+        </template>
     </v-data-table-server>
 </template>
 
@@ -35,9 +31,18 @@ import {useDatatableStore} from "@stores/datatable";
 import {storeToRefs} from "pinia";
 import {datetimeDatabaseToHuman} from "@util/helpers";
 const datatableStore = useDatatableStore();
-const { api, items, loading, options } = storeToRefs(datatableStore);
+const { api, items, loading, options, headers } = storeToRefs(datatableStore);
 
 api.value = { index: `${import.meta.env.VITE_API_URL}/listings` }
+headers.value = [
+    {title: 'Title', value: 'title', sortable: false},
+    {title: 'Type', value: 'type.name', sortable: false},
+    {title: 'Size', value: 'size', sortable: true},
+    {title: 'Address', value: 'address', sortable: false},
+    {title: 'Description', value: 'description', sortable: false},
+    {title: 'Created', value: 'created_at', sortable: true},
+    {title: 'Updated', value: 'updated_at', sortable: false},
+]
 
 onMounted(() => datatableStore.fetchData())
 </script>

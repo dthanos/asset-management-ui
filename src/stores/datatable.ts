@@ -1,17 +1,27 @@
 import {defineStore} from "pinia";
 import {computed, ref} from "vue";
 import axios from "axios";
+import { watchDebounced } from '@vueuse/core'
 
 export const useDatatableStore = defineStore('datatable', () => {
     const api = ref({})
     const items = ref([])
-    const meta = ref({})
+    const itemsLength = ref(null)
+    const headers = ref([])
+    const meta = ref({page: 1, itemsPerPage: 15})
+    const sort = ref({order: '', key: ''})
     const loading = ref(false)
     const options = computed(() => {
         return {
-            page: meta.value?.current_page,
-            itemsPerPage: meta.value?.per_page,
-            itemsLength: meta.value?.total,
+            itemsLength: itemsLength.value,
+            itemsPerPage: meta.value.itemsPerPage,
+            page: meta.value.page,
+            itemsPerPageOptions: [
+                {value: 5, title: '5'},
+                {value: 15, title: '15'},
+                {value: 45, title: '45'},
+            ],
+            height: 'calc(100vh - 120px)'
         }
     })
 
@@ -19,21 +29,39 @@ export const useDatatableStore = defineStore('datatable', () => {
         loading.value = true
         const result = await axios.get(api.value.index, {
             params: {
+                page: meta.value.page,
+                limit: meta.value.itemsPerPage,
+                sort: sort.value?.key,
+                sortDesc: sort.value?.order === 'desc',
             },
         })
-        meta.value = result.data.meta
+        itemsLength.value = result.data.meta.total
         items.value = result.data?.data
         loading.value = false
         return result.data.data;
     }
 
+    watchDebounced(
+        [sort,meta],
+        fetchData,
+        { debounce: 500, maxWait: 1000, deep: true }
+    )
     return {
         api,
         items,
+        itemsLength,
         meta,
         loading,
         options,
+        headers,
 
         fetchData,
+
+        //Events
+        on: {
+            'update:page': (v) => (meta.value.page = v),
+            'update:itemsPerPage': (v) => (meta.value.itemsPerPage = v),
+            'update:sortBy': (v) => (sort.value = v[0]),
+        },
     }
 })
