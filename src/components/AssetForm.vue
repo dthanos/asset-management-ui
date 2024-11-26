@@ -121,6 +121,7 @@
                 base-color="primary"
                 text="Save"
                 variant="tonal"
+                @click="assetStore.editAsset"
             />
         </v-card-actions>
     </v-card>
@@ -128,12 +129,8 @@
 
 
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import {useDatatableStore} from "@stores/datatable";
 import {storeToRefs} from "pinia";
-import {useRouter} from "vue-router";
 import {useAssetStore} from "@stores/asset";
-const {push} = useRouter()
 const assetStore = useAssetStore();
 const { asset, loading, types, amenities } = storeToRefs(assetStore);
 

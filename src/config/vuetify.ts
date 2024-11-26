@@ -6,6 +6,7 @@ import * as directives from 'vuetify/directives'
 
 const variant = 'filled'
 const density = 'comfortable'
+const hideDetails = 'true'
 
 const myCustomLightTheme = {
     dark: false,
@@ -32,11 +33,19 @@ const defaults = {
         variant,
         density,
         color: 'primary',
+        hideDetails
     },
     VTextField: {
         variant,
         density,
         color: 'primary',
+        hideDetails
+    },
+    VTextarea: {
+        variant,
+        density,
+        color: 'primary',
+        hideDetails
     },
 }
 export default createVuetify({
