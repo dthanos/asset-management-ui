@@ -6,6 +6,7 @@ import {unsavedChanges} from "@composables/unsavedChanges";
 
 export const useAssetStore = defineStore('asset', () => {
     const asset: Ref<Asset> = ref({})
+    const form: Ref<any> = ref(null)
     const filters = ref({type_id: null, amenities: []})
     const types = ref([])
     const amenities = ref([])
@@ -23,7 +24,7 @@ export const useAssetStore = defineStore('asset', () => {
     async function fetchAsset(id: string){
         loading.value = true;
         await showAsset(id)
-            .then(r => asset.value = r.data.data)
+            .then(r => asset.value = r)
             .finally(() => {
                 restart();
                 loading.value = false;
@@ -32,7 +33,7 @@ export const useAssetStore = defineStore('asset', () => {
     async function editAsset(){
         loading.value = true;
         await updateAsset(asset.value)
-            .then(r => asset.value = r.data.data)
+            .then(r => asset.value = r)
             .finally(() => {
                 restart();
                 loading.value = false;
@@ -45,6 +46,7 @@ export const useAssetStore = defineStore('asset', () => {
         loading,
         filters,
         isDirty,
+        form,
 
         fetchAsset,
         editAsset,
