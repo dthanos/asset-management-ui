@@ -3,17 +3,20 @@ import {Ref, ref} from "vue";
 import {Asset} from "@util/types";
 import {indexAmenities, indexTypes, showAsset, updateAsset, storeAsset} from "@services/assets";
 import {unsavedChanges} from "@composables/unsavedChanges";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {useDatatableStore} from "./datatable";
 
 export const useAssetStore = defineStore('asset', () => {
-    const {push} = useRouter()
+    const {push, back} = useRouter()
     const asset: Ref<Asset> = ref({})
     const form: Ref<any> = ref(null)
-    const filters = ref({type_id: null, amenities: []})
+    const filters = ref({type: null, amenities: []})
     const types = ref([])
     const amenities = ref([])
     const loading = ref(false)
     const { isDirty, restart } = unsavedChanges(asset, false);
+    const route = useRoute()
+    const datatableStore = useDatatableStore();
 
     fetchData();
 
@@ -21,6 +24,9 @@ export const useAssetStore = defineStore('asset', () => {
         loading.value = true;
         amenities.value = await indexAmenities()
         types.value = await indexTypes()
+        filters.value.amenities = route.query['filter[amenities]']?.split(',');
+        filters.value.type = types?.value?.map((i: any, index: number) => {return {value: index + 1, title: i.name}}).find(i => i.value == route.query['filter[type_id]']);
+        datatableStore.meta = { page: Number(route.query.page) || 1, itemsPerPage: Number(route.query.itemsPerPage) || 15 };
         loading.value = false;
     }
     async function fetchAsset(id: string){
@@ -47,7 +53,7 @@ export const useAssetStore = defineStore('asset', () => {
             .then(r => {
                 if(r) {
                     asset.value = r;
-                    push('/')
+                    back();
                 }
             })
             .finally(() => loading.value = false)

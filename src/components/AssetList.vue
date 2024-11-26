@@ -12,10 +12,11 @@
             density="comfortable"
             label="Types"
             append-inner-icon="mdi-layers-triple-outline"
-            v-model="filters.type_id"
-            :items="types.map((i: any, index: number) => {return {value: index + 1, title: i.name}})"
+            v-model="filters.type"
+            :items="orderedTypes"
             :loading="loading"
             :width="'280px'"
+            @update:model-value="onFilterUpdated"
         />
         <v-autocomplete
             clearable
@@ -31,6 +32,7 @@
             :items="amenities"
             :loading="loading"
             :width="'600px'"
+            @update:model-value="onFilterUpdated"
         />
     </v-form>
     <v-data-table-server
@@ -70,17 +72,19 @@
 
 
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
+import {computed, watch} from "vue";
 import {useDatatableStore} from "@stores/datatable";
 import {storeToRefs} from "pinia";
 import {datetimeDatabaseToHuman} from "@util/helpers";
 import {useRouter} from "vue-router";
 import {useAssetStore} from "@stores/asset";
 const datatableStore = useDatatableStore();
-const { api, items, options, headers } = storeToRefs(datatableStore);
+const { api, items, options, headers, meta } = storeToRefs(datatableStore);
 const assetStore = useAssetStore();
-const { asset, loading, amenities, types, filters } = storeToRefs(assetStore);
+const { loading, amenities, types, filters } = storeToRefs(assetStore);
 const {push} = useRouter()
+const router = useRouter()
+const orderedTypes = computed(() => types?.value?.map((i: any, index: number) => {return {value: index + 1, title: i.name}}) ?? [])
 
 api.value = { index: `${import.meta.env.VITE_API_URL}/listings` }
 headers.value = [
@@ -94,13 +98,20 @@ headers.value = [
     {title: 'Create', value: 'create', sortable: false},
 ]
 
-onMounted(async () => {
+function onFilterUpdated() {
+    api.value.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${filters.value?.type ?? ''}&filter[amenities]=${filters.value?.amenities?.join(',') ?? ''}`;
     datatableStore.fetchData()
-})
-watch(filters,
-    () => {
-        api.value.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${filters.value.type_id ?? ''}&filter[amenities]=${filters.value.amenities.join(',')}`;
-        datatableStore.fetchData()
-    },
-{deep: true})
+}
+// Translating list meta and filters to query parameters
+watch([meta, filters],
+    (newData) =>
+        router.push({
+            query: {
+                page: newData[0].page,
+                itemsPerPage: newData[0].itemsPerPage,
+                "filter[type_id]": newData[1]?.type?.value ?? newData[1]?.type,
+                "filter[amenities]": newData[1]?.amenities?.join(','),
+            }
+        })
+, {deep: true, immediate: false});
 </script>
