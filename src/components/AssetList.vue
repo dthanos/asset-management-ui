@@ -64,7 +64,6 @@ import {onMounted, ref, watch} from "vue";
 import {useDatatableStore} from "@stores/datatable";
 import {storeToRefs} from "pinia";
 import {datetimeDatabaseToHuman} from "@util/helpers";
-import {indexAmenities, indexTypes} from "@services/assets";
 import {useRouter} from "vue-router";
 import {useAssetStore} from "@stores/asset";
 const datatableStore = useDatatableStore();

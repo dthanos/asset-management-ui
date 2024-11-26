@@ -21,6 +21,8 @@
                 </Suspense>
             </RouterView>
         </v-main>
+
+        <Snackbar />
     </v-layout>
 </template>
 
@@ -30,12 +32,11 @@ import NavMenu from "./components/core/NavMenu.vue";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useGlobalStore} from "@stores/global";
+import Snackbar from "@components/core/Snackbar.vue";
 
 const globalStore = useGlobalStore();
 const { breadcrumbsTree, breadcrumbs, breadcrumbsLoading } = storeToRefs(globalStore);
 const {push} = useRouter()
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

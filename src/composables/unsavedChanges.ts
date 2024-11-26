@@ -1,7 +1,6 @@
-import {computed, isReactive, isRef, nextTick, Ref, ref, toRaw, toRef} from "vue";
+import {computed, isReactive, nextTick, Ref, ref, toRaw} from "vue";
 
 export const unsavedChanges = (form: Ref, autoStart: boolean = true) => {
-    // @ts-ignore
     const formRef = ref(form); // Create a reactive reference to the form
     const started = ref(autoStart); // Reactive reference to track if the dirtiness tracking has started
 
@@ -15,7 +14,6 @@ export const unsavedChanges = (form: Ref, autoStart: boolean = true) => {
 
     // Computed property to determine which fields have been modified aka the array of dirty field names
     const dirties = computed(() => {
-        // debugger;
         // If tracking hasn't started, return an empty array
         if (!started.value) return [];
         // Filter the form entries and compare each value to its initial state
@@ -25,12 +23,6 @@ export const unsavedChanges = (form: Ref, autoStart: boolean = true) => {
                     .filter(([key, value]) => {
                         // Check if the current value differs from the initial value
                         if(isReactive(value)) return false;
-                        // if(initial.value[key] !== value){
-                        //     console.log(`VALUE CHECK: ${key}`, initial.value[key])
-                        //     console.log(`VALUE CHECK: ${key}`, isReactive(initial.value[key]))
-                        //     console.log(`VALUE CHECK: ${key}`, value)
-                        //     console.log(`VALUE CHECK: ${key}`, isReactive(value) ? toRaw(value) : value)
-                        // }
                         return initial.value[key] !== value;
                     })
                     // Map the results to return only the keys of the dirty fields

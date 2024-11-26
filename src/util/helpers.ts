@@ -1,4 +1,6 @@
-export function datetimeDatabaseToHuman(datetime): string {
+import {useSnackbarStore} from "@stores/snackbar";
+
+export function datetimeDatabaseToHuman(datetime: string): string {
     if(!datetime) return '-';
     datetime = datetime.split('.')[0];
     const datetimeArray = datetime.split(/[\sT]+/);
@@ -9,4 +11,13 @@ export function datetimeDatabaseToHuman(datetime): string {
     } else {// Date
         return `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
     }
+}
+
+export function apiErrorHandler(errors: any): void {
+    const snackbarStore = useSnackbarStore()
+    Object.keys(errors).forEach(errorObject =>
+        errors[errorObject].forEach((error: string) =>
+            snackbarStore.addSnackbar({variant: 'error', text: error})
+        )
+    )
 }
