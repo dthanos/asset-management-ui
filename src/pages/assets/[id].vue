@@ -3,37 +3,28 @@
 </template>
 
 <script setup lang="ts">
-import {useGlobalStore} from "@stores/global";
-import {storeToRefs} from "pinia";
-import {showAsset} from "@services/assets";
-import {onMounted, ref, Ref} from "vue";
+import {onMounted} from "vue";
 import {useRoute} from "vue-router";
 import AssetForm from "@components/AssetForm.vue";
 import {useAssetStore} from "@stores/asset";
-
-const globalStore = useGlobalStore();
-const { breadcrumbs, breadcrumbsLoading } = storeToRefs(globalStore);
-const assetStore = useAssetStore();
-const { asset, loading } = storeToRefs(assetStore);
+import {useGlobalStore} from "@stores/global";
+import {storeToRefs} from "pinia";
 const {params} = useRoute()
+const globalStore = useGlobalStore();
+const { breadcrumbsTree, breadcrumbs, breadcrumbsLoading } = storeToRefs(globalStore);
+const assetStore = useAssetStore();
 
 onMounted(() => {
-    loading.value = true;
-    showAsset(params.id)
-        .then(r => {
-            asset.value = r.data.data;
-            breadcrumbs.value = [
-                { title: 'Assets', disabled: false, to: '/' },
-                { title: `${asset.value.title}`, disabled: true },
+    breadcrumbs.value = true;
+    assetStore.fetchAsset(params.id)
+        .then(() => {
+            breadcrumbsTree.value = [
+                {title: 'Assets', disabled: false, to: '/'},
+                {title: `${assetStore.asset.title}`, disabled: true},
             ]
         })
-        .finally(() => {
-            loading.value = false;
-            breadcrumbsLoading.value = false;
-        })
+        .finally(() => breadcrumbsLoading.value = false)
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

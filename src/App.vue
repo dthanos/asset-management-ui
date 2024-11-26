@@ -4,8 +4,8 @@
         <NavMenu />
 
         <v-main style="min-height: 100vh">
-            <v-sheet elevation="3" class="m-5" v-if="breadcrumbs.length">
-                <v-breadcrumbs :items="breadcrumbs" v-if="!breadcrumbsLoading">
+            <v-sheet elevation="3" class="m-5" v-if="breadcrumbs">
+                <v-breadcrumbs :items="breadcrumbsTree" v-if="!breadcrumbsLoading">
                     <template v-slot:prepend>
                         <v-icon @click="push(`/`)" link size="small" icon="mdi-home"></v-icon>
                         <v-breadcrumbs-divider></v-breadcrumbs-divider>
@@ -32,7 +32,7 @@ import {storeToRefs} from "pinia";
 import {useGlobalStore} from "@stores/global";
 
 const globalStore = useGlobalStore();
-const { breadcrumbs, breadcrumbsLoading } = storeToRefs(globalStore);
+const { breadcrumbsTree, breadcrumbs, breadcrumbsLoading } = storeToRefs(globalStore);
 const {push} = useRouter()
 </script>
 
