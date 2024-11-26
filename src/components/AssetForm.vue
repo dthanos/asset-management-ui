@@ -142,6 +142,7 @@
                 base-color="primary"
                 text="Save"
                 variant="tonal"
+                :disabled="!isDirty"
                 @click="assetStore.editAsset"
             />
         </v-card-actions>
@@ -153,8 +154,5 @@
 import {storeToRefs} from "pinia";
 import {useAssetStore} from "@stores/asset";
 const assetStore = useAssetStore();
-const { asset, loading, types, amenities } = storeToRefs(assetStore);
-
-onMounted(async () => {
-})
+const { asset, loading, types, amenities, isDirty } = storeToRefs(assetStore);
 </script>
