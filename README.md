@@ -8,7 +8,7 @@
     - Displays a list of assets in the inventory for easy access and navigation.
     - Filter assets by type or a combination of amenities.
     - Supports applying multiple filters simultaneously to refine search results.
-    - Datatable pagination.
+    - List pagination and filtering embedded in the application's routing.
 
 - [ ] Asset Data
     - User-friendly interface(form) for updating asset information as well as creating new assets.
