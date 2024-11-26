@@ -1,5 +1,16 @@
-# Vue 3 + Vite
+## Description
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+### This project is a Single Page Application (SPA) prototype built using HTML, CSS, and JavaScript. The application enables users to view, filter, and edit asset data in a streamlined interface. While designed as a Minimum Viable Product (MVP), the architecture is prepared for future scalability to support enterprise-level functionalities.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+##### Features
+
+- [ ] Asset List View
+    - Displays a list of assets in the inventory for easy access and navigation.
+    - Filter assets by type or a combination of amenities.
+    - Supports applying multiple filters simultaneously to refine search results.
+    - Datatable pagination.
+
+- [ ] Asset Data
+    - User-friendly interface(form) for updating asset information as well as creating new assets.
+    - User friendly field validation.
+    - Event handling using snackbars.
