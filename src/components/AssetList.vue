@@ -1,8 +1,43 @@
 <template>
+    <v-form
+        class="p-10 d-flex justify-space-around"
+        style="height: 120px;"
+    >
+        <v-select
+            clearable
+            rounded="0"
+            class="h-100"
+            color="primary"
+            variant="outlined"
+            density="comfortable"
+            label="Types"
+            append-inner-icon="mdi-layers-triple-outline"
+            v-model="filters.type_id"
+            :items="types"
+            :loading="loading"
+            :width="'280px'"
+        />
+        <v-autocomplete
+            clearable
+            multiple
+            rounded="0"
+            class="h-100"
+            color="primary"
+            variant="outlined"
+            density="comfortable"
+            label="Amenities"
+            append-inner-icon="mdi-format-list-checks"
+            v-model="filters.amenities"
+            :items="amenities"
+            :loading="loading"
+            :width="'600px'"
+        />
+    </v-form>
     <v-data-table-server
+        class="px-5"
         v-on="datatableStore.on"
         v-bind="options"
-        :loading="loading"
+        :loading="datatableStore.loading"
         :headers="headers"
         :items="items"
     >
@@ -25,8 +60,7 @@
 
 
 <script setup lang="ts">
-
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useDatatableStore} from "@stores/datatable";
 import {storeToRefs} from "pinia";
 import {datetimeDatabaseToHuman} from "@util/helpers";
@@ -44,5 +78,13 @@ headers.value = [
     {title: 'Updated', value: 'updated_at', sortable: false},
 ]
 
-onMounted(() => datatableStore.fetchData())
+onMounted(async () => {
+    datatableStore.fetchData()
+})
+watch(filters,
+    () => {
+        api.value.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${filters.value.type_id ?? ''}&filter[amenities]=${filters.value.amenities.join(',')}`;
+        datatableStore.fetchData()
+    },
+{deep: true})
 </script>

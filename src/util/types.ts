@@ -18,3 +18,10 @@ interface Listing {
     created_at: string;
     updated_at: string;
 }
+
+export interface DatatableApi {
+    index: string;
+    create: string;
+    update: string;
+    delete: string;
+}

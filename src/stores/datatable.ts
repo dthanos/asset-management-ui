@@ -4,7 +4,7 @@ import axios from "axios";
 import { watchDebounced } from '@vueuse/core'
 
 export const useDatatableStore = defineStore('datatable', () => {
-    const api = ref({})
+    const api: Ref<DatatableApi> = ref({})
     const items = ref([])
     const itemsLength = ref(null)
     const headers = ref([])
@@ -59,9 +59,9 @@ export const useDatatableStore = defineStore('datatable', () => {
 
         //Events
         on: {
-            'update:page': (v) => (meta.value.page = v),
-            'update:itemsPerPage': (v) => (meta.value.itemsPerPage = v),
-            'update:sortBy': (v) => (sort.value = v[0]),
+            'update:page': (v: any) => (meta.value.page = v),
+            'update:itemsPerPage': (v: any) => (meta.value.itemsPerPage = v),
+            'update:sortBy': (v: any) => (sort.value = v[0]),
         },
     }
 })
