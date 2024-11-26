@@ -13,7 +13,7 @@
             label="Types"
             append-inner-icon="mdi-layers-triple-outline"
             v-model="filters.type_id"
-            :items="types"
+            :items="types.map((i: any, index: number) => {return {value: index + 1, title: i.name}})"
             :loading="loading"
             :width="'280px'"
         />

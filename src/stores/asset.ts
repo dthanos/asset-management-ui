@@ -1,7 +1,6 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import {Asset} from "@util/types";
-import {indexAmenities, indexTypes} from "../services/assets";
 import {indexAmenities, indexTypes, showAsset, updateAsset} from "@services/assets";
 
 export const useAssetStore = defineStore('asset', () => {
@@ -16,7 +15,7 @@ export const useAssetStore = defineStore('asset', () => {
     async function fetchData(){
         loading.value = true;
         amenities.value = (await indexAmenities()).data.data
-        types.value = (await indexTypes()).data.data.map((i: any, index: number) => {return {value: index + 1, title: i.name, id: i.uuid}})
+        types.value = (await indexTypes()).data.data
         loading.value = false;
     }
     async function fetchAsset(id: string){
