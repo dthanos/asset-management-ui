@@ -4,6 +4,9 @@ import * as components from 'vuetify/components'
 import * as labs from 'vuetify/labs/components'
 import * as directives from 'vuetify/directives'
 
+const variant = 'filled'
+const density = 'comfortable'
+
 const myCustomLightTheme = {
     dark: false,
     background: '#FFFFFF',
@@ -24,11 +27,24 @@ const myCustomLightTheme = {
     primaryShade4: '#073c78',
     secondaryShade4: '#9b6d00',
 }
+const defaults = {
+    VSelect: {
+        variant,
+        density,
+        color: 'primary',
+    },
+    VTextField: {
+        variant,
+        density,
+        color: 'primary',
+    },
+}
 export default createVuetify({
     components: {
         ...components,
         ...labs
     },
+    defaults,
     directives,
     icons: {
         defaultSet: 'mdi',
