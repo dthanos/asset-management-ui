@@ -10,18 +10,19 @@ const defaultParams = {
 
 export const useSnackbarStore = defineStore('snackbar', () => {
 
-    const notifications = ref([])
+    const snackbars = ref([])
 
     function addSnackbar(params){
 
-        notifications.value.push({
+        snackbars.value.push({
             ...defaultParams,
             ...params,
         })
     }
 
     return {
-        notifications,
+        defaultParams,
+        snackbars,
 
         addSnackbar
     }

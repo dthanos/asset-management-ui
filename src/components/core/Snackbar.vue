@@ -1,31 +1,41 @@
 <template>
     <div>
         <v-snackbar
-            :key="index" v-for="(notification, index) in snackbarStore.notifications"
-            :variant="'elevated'"
-            :timeout="notification.timeout"
+            v-for="(snackbar, index) in snackbarStore.snackbars"
             location="right top"
-            :color="notification.variant"
+            :key="index"
+            :variant="'elevated'"
+            :timeout="snackbar.variant === 'error' ? -1 : snackbar.timeout"
+            :color="snackbar.variant"
             :model-value="true"
         >
-            <div class="d-flex align-center">
-                <v-icon
-                    class="pr-1"
-                    v-if="notification.variant === 'success'"
-                    :icon="'mdi-check-circle-outline'"
-                />
-                <v-icon
-                    class="pr-1"
-                    v-else-if="notification.variant === 'error'"
-                    :icon="'mdi-alpha-x-circle-outline'"
-                />
-                <v-icon
-                    class="pr-1"
-                    v-else-if="notification.variant === 'warning'"
-                    :icon="'mdi-alert-circle-outline'"
-                />
-                {{notification.text}}
+            <div class="d-flex align-center justify-space-between">
+                <div>
+                    <v-icon
+                        class="pr-1"
+                        v-if="snackbar.variant === 'success'"
+                        :icon="'mdi-check-circle-outline'"
+                    />
+                    <v-icon
+                        class="pr-1"
+                        v-else-if="snackbar.variant === 'error'"
+                        :icon="'mdi-alpha-x-circle-outline'"
+                    />
+                    <v-icon
+                        class="pr-1"
+                        v-else-if="snackbar.variant === 'warning'"
+                        :icon="'mdi-alert-circle-outline'"
+                    />
+                    {{snackbar.text}}
+                </div>
             </div>
+            <template v-slot:actions="{ isActive }">
+                <v-icon
+                    v-if="snackbar.variant === 'error'"
+                    :icon="'mdi-close-circle-outline'"
+                    @click="isActive.value = false"
+                />
+            </template>
         </v-snackbar>
     </div>
 </template>

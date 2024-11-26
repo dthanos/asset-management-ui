@@ -22,7 +22,7 @@ export const useDatatableStore = defineStore('datatable', () => {
                 {value: 15, title: '15'},
                 {value: 45, title: '45'},
             ],
-            height: 'calc(100vh - 220px)'
+            height: 'calc(100vh - 250px)'
         }
     })
 
