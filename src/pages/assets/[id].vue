@@ -1,5 +1,5 @@
 <template>
-    <AssetForm />
+    <AssetForm :create="false" />
 </template>
 
 <script setup lang="ts">

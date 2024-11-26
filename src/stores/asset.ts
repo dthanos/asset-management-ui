@@ -1,10 +1,12 @@
 import {defineStore} from "pinia";
 import {Ref, ref} from "vue";
 import {Asset} from "@util/types";
-import {indexAmenities, indexTypes, showAsset, updateAsset} from "@services/assets";
+import {indexAmenities, indexTypes, showAsset, updateAsset, storeAsset} from "@services/assets";
 import {unsavedChanges} from "@composables/unsavedChanges";
+import {useRouter} from "vue-router";
 
 export const useAssetStore = defineStore('asset', () => {
+    const {push} = useRouter()
     const asset: Ref<Asset> = ref({})
     const form: Ref<any> = ref(null)
     const filters = ref({type_id: null, amenities: []})
@@ -17,8 +19,8 @@ export const useAssetStore = defineStore('asset', () => {
 
     async function fetchData(){
         loading.value = true;
-        amenities.value = (await indexAmenities()).data.data
-        types.value = (await indexTypes()).data.data
+        amenities.value = await indexAmenities()
+        types.value = await indexTypes()
         loading.value = false;
     }
     async function fetchAsset(id: string){
@@ -39,6 +41,17 @@ export const useAssetStore = defineStore('asset', () => {
                 loading.value = false;
             })
     }
+    async function createAsset(){
+        loading.value = true;
+        await storeAsset(asset.value)
+            .then(r => {
+                if(r) {
+                    asset.value = r;
+                    push('/')
+                }
+            })
+            .finally(() => loading.value = false)
+    }
     return {
         asset,
         types,
@@ -50,5 +63,6 @@ export const useAssetStore = defineStore('asset', () => {
 
         fetchAsset,
         editAsset,
+        createAsset,
     }
 })

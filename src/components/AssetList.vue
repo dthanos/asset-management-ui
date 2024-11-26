@@ -41,6 +41,16 @@
         :headers="headers"
         :items="items"
     >
+        <template v-slot:header.create>
+            <th>
+                <v-icon
+                    size="large"
+                    icon="mdi-plus-circle-outline"
+                    color="success"
+                    @click="push('/assets/create')"
+                />
+            </th>
+        </template>
         <template v-slot:item="{ item, index }">
             <tr class="cursor-pointer hover:bg-gray-100" @click="push(`/assets/${item.uuid}`)">
                 <td>{{ item.title }}</td>
@@ -81,6 +91,7 @@ headers.value = [
     {title: 'Description', value: 'description', sortable: false},
     {title: 'Created', value: 'created_at', sortable: true},
     {title: 'Updated', value: 'updated_at', sortable: false},
+    {title: 'Create', value: 'create', sortable: false},
 ]
 
 onMounted(async () => {

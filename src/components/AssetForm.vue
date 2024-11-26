@@ -144,13 +144,13 @@
             </v-card-text>
             <v-card-actions class="d-flex justify-end">
                 <v-btn
-                    prepend-icon="mdi-content-save-outline"
-                    color="primary"
-                    base-color="primary"
-                    text="Save"
                     variant="tonal"
-                    :disabled="!form?.isValid || !isDirty"
-                    @click="assetStore.editAsset"
+                    :text="create ? 'Create' : 'Save'"
+                    :disabled="create ? !form?.isValid : (!form?.isValid || !isDirty)"
+                    :prepend-icon="`mdi-${create ? 'plus-box-outline' : 'content-save-outline'}`"
+                    :color="create ? 'success' : 'primary'"
+                    :base-color="create ? 'success' : 'primary'"
+                    @click="create ? assetStore.createAsset() : assetStore.editAsset()"
                 />
             </v-card-actions>
         </v-card>
@@ -164,4 +164,5 @@ import {useAssetStore} from "@stores/asset";
 import moment from "moment";
 const assetStore = useAssetStore();
 const { asset, loading, types, amenities, isDirty, form } = storeToRefs(assetStore);
+const props = defineProps({create: Boolean});
 </script>
