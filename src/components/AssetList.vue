@@ -16,7 +16,7 @@
             :items="orderedTypes"
             :loading="loading"
             :width="'280px'"
-            @update:model-value="onFilterUpdated"
+            @update:model-value="assetStore.onFilterUpdated"
         />
         <v-autocomplete
             clearable
@@ -32,7 +32,7 @@
             :items="amenities"
             :loading="loading"
             :width="'600px'"
-            @update:model-value="onFilterUpdated"
+            @update:model-value="assetStore.onFilterUpdated"
         />
     </v-form>
     <v-data-table-server
@@ -98,10 +98,6 @@ headers.value = [
     {title: 'Create', value: 'create', sortable: false},
 ]
 
-function onFilterUpdated() {
-    api.value.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${filters.value?.type ?? ''}&filter[amenities]=${filters.value?.amenities?.join(',') ?? ''}`;
-    datatableStore.fetchData()
-}
 // Translating list meta and filters to query parameters
 watch([meta, filters],
     (newData) =>
