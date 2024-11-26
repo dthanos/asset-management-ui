@@ -42,7 +42,7 @@
         :items="items"
     >
         <template v-slot:item="{ item, index }">
-            <tr>
+            <tr class="cursor-pointer hover:bg-gray-100" @click="push(`/assets/${item.uuid}`)">
                 <td>{{ item.title }}</td>
                 <td>{{ item.type.name }}</td>
                 <td>{{ item.size }}</td>
@@ -64,8 +64,14 @@ import {onMounted, ref, watch} from "vue";
 import {useDatatableStore} from "@stores/datatable";
 import {storeToRefs} from "pinia";
 import {datetimeDatabaseToHuman} from "@util/helpers";
+import {indexAmenities, indexTypes} from "@services/assets";
+import {useRouter} from "vue-router";
+import {useAssetStore} from "@stores/asset";
 const datatableStore = useDatatableStore();
-const { api, items, loading, options, headers } = storeToRefs(datatableStore);
+const { api, items, options, headers } = storeToRefs(datatableStore);
+const assetStore = useAssetStore();
+const { asset, loading, amenities, types, filters } = storeToRefs(assetStore);
+const {push} = useRouter()
 
 api.value = { index: `${import.meta.env.VITE_API_URL}/listings` }
 headers.value = [

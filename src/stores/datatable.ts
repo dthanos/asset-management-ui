@@ -1,7 +1,8 @@
 import {defineStore} from "pinia";
-import {computed, ref} from "vue";
+import {computed, Ref, ref} from "vue";
 import axios from "axios";
 import { watchDebounced } from '@vueuse/core'
+import {DatatableApi} from "@util/types";
 
 export const useDatatableStore = defineStore('datatable', () => {
     const api: Ref<DatatableApi> = ref({})
@@ -21,7 +22,7 @@ export const useDatatableStore = defineStore('datatable', () => {
                 {value: 15, title: '15'},
                 {value: 45, title: '45'},
             ],
-            height: 'calc(100vh - 120px)'
+            height: 'calc(100vh - 220px)'
         }
     })
 

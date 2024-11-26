@@ -1,4 +1,4 @@
-interface Listing {
+export interface Asset {
     uuid: string;
     amenities: [];
     bathrooms: number;
