@@ -26,7 +26,7 @@ export const useAssetStore = defineStore('asset', () => {
         types.value = await indexTypes()
         filters.value.amenities = route.query['filter[amenities]']?.split(',');
         filters.value.type = types?.value?.map((i: any, index: number) => {return {value: index + 1, title: i.name}}).find(i => i.value == route.query['filter[type_id]']);
-        datatableStore.api.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${filters.value?.type?.value ?? filters.value?.type}&filter[amenities]=${filters.value?.amenities?.join(',') ?? ''}`;
+        datatableStore.api.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${(filters.value?.type?.value ?? filters.value?.type) ?? ''}&filter[amenities]=${filters.value?.amenities?.join(',') ?? ''}`;
         datatableStore.meta = { page: Number(route.query.page) || 1, itemsPerPage: Number(route.query.itemsPerPage) || 15 };
         loading.value = false;
     }

@@ -99,7 +99,7 @@ headers.value = [
 ]
 
 function onFilterUpdated() {
-    api.value.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${filters.value?.type ?? ''}&filter[amenities]=${filters.value?.amenities?.join(',') ?? ''}`;
+    api.value.index = `${import.meta.env.VITE_API_URL}/listings?filter[type_id]=${(filters.value?.type?.value ?? filters.value?.type) ?? ''}&filter[amenities]=${filters.value?.amenities?.join(',') ?? ''}`;
     datatableStore.fetchData()
 }
 // Translating list meta and filters to query parameters
